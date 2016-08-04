@@ -1,0 +1,40 @@
+-The user must be able to access and use your application through a web browser
+*use tomcat
+
+-All data must be saved in your database
+*examine how data saves into my database.
+*duplicate that process with the CRUD methods
+
+-All CRUD operations must get connections from the connection pool
+*Create
+*Read
+*Update
+*Delete
+**create each of these methods with the connection to the connection pool
+
+-Users must be able to create new expenses that include the following
+
+*expenseID
+    *expenseName
+        *expenseAmount
+            *expenseDate
+                *categoryType or categoryId
+
+-Users can NOT hand enter an expense category when creating a new expense
+*(aka use a <select><option></option></select> in your form)
+
+-One way to do this is to have a table of expenses and you can use the categoryId to join them, like you did yesterday
+
+-Another way is to use an enum like you did in PetVet
+*check out the usage of enum
+*while there look at how jsp's will play a part
+
+-Users must be able to view a report (aka table) of all expenses
+*view expense method
+
+-Users must be able to view a report (aka table) of expenses between two dates
+*view tables method
+** look at the join method in ricks post it note
+
+-Users must be able to view a report (aka table) of expenses in a selected category
+*view category method
