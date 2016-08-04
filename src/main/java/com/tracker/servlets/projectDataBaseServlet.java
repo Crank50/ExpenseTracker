@@ -57,7 +57,7 @@ public class projectDataBaseServlet extends HttpServlet {
 
     private void testInitalLoad() {
         try {
-            Connection connection = DatabaseServlet.getConnection();
+            Connection connection = projectDataBaseServlet.getConnection();
             if(connection != null) {
                 Statement stmt = connection.createStatement();
                 String query = "SELECT * FROM expense";

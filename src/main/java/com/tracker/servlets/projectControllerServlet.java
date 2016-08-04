@@ -1,7 +1,7 @@
 package com.tracker.servlets;
 
-import com.tracker.data.Test;
-import com.tracker.data.util.TestDataUtil;
+import com.tracker.data.Expense;
+import com.tracker.data.util.expenseDataUtil;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -25,12 +25,12 @@ public class projectControllerServlet extends HttpServlet {
         System.out.println("JSP Name: "+jspName);
 
         if(jspName.equalsIgnoreCase("viewAllExpenseData")) {
-            ArrayList<Test> tests = TestDataUtil.getAllTests();
-            request.setAttribute("tests",tests);
+            ArrayList<Expense> expenses = expenseDataUtil.getAllExpense();
+            request.setAttribute("expenses",expenses);
         } else if (jspName.equalsIgnoreCase("viewExpenseData")) {
-            String testId = request.getParameter("expenseID");
-            Test test = new Test(Integer.parseInt(testId));
-            request.setAttribute("test",test);
+            String expenseID = request.getParameter("expenseID");
+            Expense expense = new Expense(Integer.parseInt(expenseID));
+            request.setAttribute("expense",expense);
         }
 
         RequestDispatcher view = request.getRequestDispatcher("/testViews/"+jspName+".jsp");
