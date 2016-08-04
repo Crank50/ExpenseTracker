@@ -2,7 +2,7 @@
 *use tomcat
 
 -All data must be saved in your database
-*examine how data saves into my database.
+*examine how data saves into my database. create and update
 *duplicate that process with the CRUD methods
 
 -All CRUD operations must get connections from the connection pool

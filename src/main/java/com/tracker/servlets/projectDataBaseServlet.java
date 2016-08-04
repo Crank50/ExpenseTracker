@@ -93,7 +93,7 @@ public class projectDataBaseServlet extends HttpServlet {
     }
 
     private synchronized void update(String sqlExpression) throws SQLException {
-        Connection connection = DatabaseServlet.getConnection();
+        Connection connection = projectDataBaseServlet.getConnection();
         if(connection != null) {
             System.out.println("========= sqlExpression: "+sqlExpression);
             Statement stmt = connection.createStatement();

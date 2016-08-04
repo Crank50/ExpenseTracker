@@ -26,8 +26,8 @@ public class expenseDataUtil {
             String query = "SELECT id FROM test";
             ResultSet rs = stmt.executeQuery(query);
             while(rs.next()) {
-                Test t = new Test(rs.getInt("id"));
-                Expenses.add(t);
+                Expense e = new Expense(rs.getInt("expenseID"));
+                Expenses.add(e);
             }
         }
         catch(SQLException sqle){
