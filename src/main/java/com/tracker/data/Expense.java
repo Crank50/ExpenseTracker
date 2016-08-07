@@ -1,42 +1,48 @@
 package com.tracker.data;
 
-import com.tracker.servlets.projectDataBaseServlet;
+import com.tracker.servlets.DatabaseServlet;
 
 import java.sql.*;
+import java.time.LocalDate;
 
-/**
- * Created by Justin on 8/4/16.
- */
-public class Expense {private Connection connection;
-    private int expenseID;
+
+public class Expense {
+    public static enum ExpenseCategory { MEAL, HOTEL, AIRFAIR, CAR, HARDWARE, SOFTWARE, UTILITY, SUPPLIES }
+
+    private Connection connection;
+    private int id;
     private String expenseName;
-    private String expenseDate;
     private int expenseAmount;
+    private LocalDate expenseDate;
+    private ExpenseCategory expenseCategory;
     private boolean exists = false;
 
-    public Expense() {
-
-    }
+    public Expense() {}
 
     public Expense(int id) {
-        expenseload(id);
+        load(id);
     }
 
     // This is the READ in CRUD
-    public void expenseload(int id) {
+    public void load(int id) {
         try
         {
-            connection = projectDataBaseServlet.getConnection();
+            connection = DatabaseServlet.getConnection();
 
             Statement stmt = connection.createStatement();
-            String query = "SELECT * FROM test WHERE id = "+id;
+            String query = "SELECT expenseName, expenseAmount, expenseDate, expenseCategory FROM expense WHERE id = "+id;
             ResultSet rs = stmt.executeQuery(query);
             rs.next();
-            this.expenseID = id;
-            this.setExpenseName(rs.getString("name"));
-            this.setExpenseAmount(rs.getInt("amount"));
-            this.setExpenseDate(rs.getString("date"));
+            this.id = id;
+            this.setExpenseName(rs.getString("expenseName"));
+            this.setExpenseAmount(rs.getInt("expenseAmount"));
+            this.setExpenseDate(rs.getDate("expenseDate").toLocalDate());
+            this.setExpenseCategory(ExpenseCategory.valueOf(rs.getString("expenseCategory")));
             exists = true;
+
+            rs.close();
+            stmt.close();
+            connection.close();
         }
         catch(SQLException sqle){
             sqle.printStackTrace();
@@ -44,22 +50,27 @@ public class Expense {private Connection connection;
     }
 
     // This is the CREATE in CRUD
-    public void createExpense() {
+    public void saveNew() {
         if(!exists){
             try
             {
-                connection = projectDataBaseServlet.getConnection();
+                connection = DatabaseServlet.getConnection();
 
-                String query = "INSERT INTO expense (expenseName,expenseAmount,expenseDate) VALUES (?,?,?);";
-                PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+                String query = "INSERT INTO expense (expenseName, expenseAmount, expenseDate, expenseCategory) VALUES (?,?,?,?);";
+                PreparedStatement preparedStatement = connection.prepareStatement(query);
+//                PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
                 preparedStatement.setString(1,this.getExpenseName());
-                preparedStatement.setString(2,this.getExpenseDate());
-                preparedStatement.setInt(3,this.getExpenseAmount());
-                ResultSet rs = preparedStatement.getGeneratedKeys();
-                if (rs != null && rs.next()) {
-                    this.expenseID = rs.getInt(1);
-                    exists = true;
-                }
+                preparedStatement.setInt(2,this.getExpenseAmount());
+                preparedStatement.setDate(3,Date.valueOf(this.getExpenseDate()));
+                preparedStatement.setString(4,this.getExpenseCategory().toString());
+                preparedStatement.executeUpdate();
+//                ResultSet rs = preparedStatement.getGeneratedKeys();
+//                if (rs != null && rs.next()) {
+//                    this.id = rs.getInt(1);
+//                    exists = true;
+//                }
+                preparedStatement.close();
+                connection.close();
             }
             catch(SQLException sqle){
                 sqle.printStackTrace();
@@ -74,16 +85,19 @@ public class Expense {private Connection connection;
         if(exists){
             try
             {
-                connection = projectDataBaseServlet.getConnection();
+                connection = DatabaseServlet.getConnection();
 
-                String query = "UPDATE expense SET expenseName = ?, expenseAmount = ?, expenseDate = ? WHERE id = ?";
+                String query = "UPDATE expense SET expenseName = ?, expenseAmount = ?, expenseDate = ?, expenseCategory = ? WHERE id = ?";
                 PreparedStatement preparedStatement = connection.prepareStatement(query);
-
                 preparedStatement.setString(1,this.getExpenseName());
                 preparedStatement.setInt(2,this.getExpenseAmount());
-                preparedStatement.setString(3,this.getExpenseDate());
-                preparedStatement.setInt(4,this.getExpenseID());
+                preparedStatement.setDate(3,Date.valueOf(this.getExpenseDate()));
+                preparedStatement.setString(4,this.getExpenseCategory().toString());
+                preparedStatement.setInt(5,this.getId());
                 preparedStatement.executeUpdate();
+
+                preparedStatement.close();
+                connection.close();
             }
             catch(SQLException sqle){
                 sqle.printStackTrace();
@@ -98,13 +112,16 @@ public class Expense {private Connection connection;
         if(exists){
             try
             {
-                connection = projectDataBaseServlet.getConnection();
+                connection = DatabaseServlet.getConnection();
 
                 String query = "DELETE FROM expense WHERE id = ?";
                 PreparedStatement preparedStatement = connection.prepareStatement(query);
-                preparedStatement.setInt(1,this.getExpenseID());
+                preparedStatement.setInt(1,this.getId());
                 preparedStatement.executeUpdate();
                 exists = false;
+
+                preparedStatement.close();
+                connection.close();
             }
             catch(SQLException sqle){
                 sqle.printStackTrace();
@@ -114,12 +131,12 @@ public class Expense {private Connection connection;
         }
     }
 
-    public int getExpenseID() {
-        return expenseID;
+    public int getId() {
+        return id;
     }
 
-    public void setExpenseID(int expenseID) {
-        this.expenseID = expenseID;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getExpenseName() {
@@ -130,19 +147,27 @@ public class Expense {private Connection connection;
         this.expenseName = expenseName;
     }
 
-    public String getExpenseDate() {
-        return expenseDate;
-    }
-
-    public void setExpenseDate(String expenseDate) {
-        this.expenseDate = expenseDate;
-    }
-
     public int getExpenseAmount() {
         return expenseAmount;
     }
 
     public void setExpenseAmount(int expenseAmount) {
         this.expenseAmount = expenseAmount;
+    }
+
+    public LocalDate getExpenseDate() {
+        return expenseDate;
+    }
+
+    public void setExpenseDate(LocalDate expenseDate) {
+        this.expenseDate = expenseDate;
+    }
+
+    public ExpenseCategory getExpenseCategory() {
+        return expenseCategory;
+    }
+
+    public void setExpenseCategory(ExpenseCategory expenseCategory) {
+        this.expenseCategory = expenseCategory;
     }
 }

@@ -8,10 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import java.beans.PropertyVetoException;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 /**
  * Created by Justin on 8/4/16.
@@ -21,7 +18,7 @@ public class projectDataBaseServlet extends HttpServlet {
     private static ComboPooledDataSource connectionPool = null;
     private static final String JDBC_DRIVER = "org.hsqldb.jdbcDriver";
     private static final String DB_URL = "jdbc:hsqldb:expense_tracker_db";
-    private static final String USER = "projectAdmin";
+    private static final String USER = "sa";
     private static final String PASS = "password";
 
     public void init(ServletConfig config) throws ServletException {
@@ -34,7 +31,8 @@ public class projectDataBaseServlet extends HttpServlet {
             cpds.setPassword(PASS);
             connectionPool = cpds;
             System.out.println("NOTE: PROJECT DATABASE CONNECTION POOL STARTED");
-            testInitalLoad();
+            createInitialLoad();
+//            droptable();
         }
         catch (PropertyVetoException pve)
         {
@@ -42,8 +40,7 @@ public class projectDataBaseServlet extends HttpServlet {
         }
     }
 
-    public static Connection getConnection()
-    {
+    public static Connection getConnection() {
         try
         {
             return connectionPool.getConnection(); // Creates Connection
@@ -54,13 +51,23 @@ public class projectDataBaseServlet extends HttpServlet {
             return null;
         }
     }
+    private void droptable() {
+        try {
+            System.out.println("Table Dropped");
+            update("DROP TABLE EXPENSE");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-    private void testInitalLoad() {
+    private void createInitialLoad() {
+
+
         try {
             Connection connection = projectDataBaseServlet.getConnection();
             if(connection != null) {
                 Statement stmt = connection.createStatement();
-                String query = "SELECT * FROM expense";
+                String query = ("SELECT * FROM expense");
                 ResultSet rs = stmt.executeQuery(query);
                 rs.next();
             } else {
@@ -68,17 +75,19 @@ public class projectDataBaseServlet extends HttpServlet {
             }
         }
         catch(SQLException sqle){
+            sqle.printStackTrace();
+
             try {
                 System.out.println("NOTE: DATABASE DID NOT EXIST, CREATING DATABASE"); // DataBase Created Here
-                update("CREATE TABLE expense (expenseid INTEGER IDENTITY PRIMARY KEY, expenseName VARCHAR(30),expenseAmount INTEGER(30),expenseDate VARCHAR(30))");
+                update("CREATE TABLE expense (id INTEGER IDENTITY PRIMARY KEY, expenseName VARCHAR(30),expenseAmount INTEGER,expenseDate VARCHAR(30))");
                 //*expenseID *expenseName *int expenseAmount  *expenseDate Date(Use Date import)
                 update("INSERT INTO expense (expenseName) VALUES('name1')");
                 update("INSERT INTO expense (expenseName) VALUES('name2')");
                 update("INSERT INTO expense (expenseName) VALUES('name3')");
 
-                update("INSERT INTO expense (expenseAmount) VALUES('amount1')");
-                update("INSERT INTO expense (expenseAmount) VALUES('amount2')");
-                update("INSERT INTO expense (expenseAmount) VALUES('amount3')");
+                update("INSERT INTO expense (expenseAmount) VALUES(3)");
+                update("INSERT INTO expense (expenseAmount) VALUES(4)");
+                update("INSERT INTO expense (expenseAmount) VALUES(10)");
 
                 update("INSERT INTO expense (expenseDate) VALUES('date1')");
                 update("INSERT INTO expense (expenseDate) VALUES('date2')");
@@ -112,8 +121,7 @@ public class projectDataBaseServlet extends HttpServlet {
         {
             DataSources.destroy(connectionPool);
         }
-        catch (SQLException e)
-        {
+        catch (SQLException e) {
             e.printStackTrace();
         }
     }

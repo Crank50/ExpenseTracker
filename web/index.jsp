@@ -6,6 +6,8 @@
   <body>
   <h1>Expense Tracker</h1>
   &nbsp;&nbsp;&nbsp;&nbsp;
-  <a href="/mvc_test/viewAllTestData">View All Test Data</a>
+  <a href="/mvc_exp/viewAllExpenseData">View All Expense Data</a>
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="/mvc_exp/viewExpenseData">View Expense Data</a>
   </body>
 </html>
