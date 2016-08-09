@@ -5,20 +5,28 @@
          version="3.1">
 
     <servlet>
-        <servlet-name>projectDataBaseServlet</servlet-name>
-        <servlet-class>com.tracker.servlets.projectDataBaseServlet</servlet-class>
+        <servlet-name>DatabaseServlet</servlet-name>
+        <servlet-class>com.tracker.servlets.DatabaseServlet</servlet-class>
         <load-on-startup>0</load-on-startup>
     </servlet>
     <servlet>
-        <servlet-name>projectControllerServlet</servlet-name>
-        <servlet-class>com.tracker.servlets.projectControllerServlet</servlet-class>
+        <servlet-name>TestControllerServlet</servlet-name>
+        <servlet-class>com.tracker.servlets.TestControllerServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ExpenseControllerServlet</servlet-name>
+        <servlet-class>com.tracker.servlets.ExpenseControllerServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>projectDataBaseServlet</servlet-name>
+        <servlet-name>DatabaseServlet</servlet-name>
         <url-pattern>/DB</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>projectControllerServlet</servlet-name>
+        <servlet-name>TestControllerServlet</servlet-name>
+        <url-pattern>/mvc_test/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ExpenseControllerServlet</servlet-name>
         <url-pattern>/mvc_exp/*</url-pattern>
     </servlet-mapping>
 </web-app>

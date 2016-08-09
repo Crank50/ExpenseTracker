@@ -3,7 +3,6 @@ package com.tracker.data.util;
 
 import com.tracker.data.Expense;
 import com.tracker.servlets.DatabaseServlet;
-import com.tracker.servlets.projectDataBaseServlet;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -16,24 +15,24 @@ public class expenseUtil {
 
 
     public static ArrayList<Expense> getAllExpense() {
-        ArrayList<Expense> Expenses = new ArrayList<>();
+        ArrayList<Expense> expenses = new ArrayList<>();
         try
         {
-            Connection connection = projectDataBaseServlet.getConnection();
+            Connection connection = DatabaseServlet.getConnection();
 
             Statement stmt = connection.createStatement();
             String query = ("SELECT id FROM expense");
             ResultSet rs = stmt.executeQuery(query);
             while(rs.next()) {
                 Expense e = new Expense(rs.getInt("id"));
-                Expenses.add(e);
+                expenses.add(e);
             }
         }
         catch(SQLException sqle){
             sqle.printStackTrace();
         }
 
-        return Expenses;
+        return expenses;
     }
     public static ArrayList<Expense> getExpensesInCategory(Expense.ExpenseCategory expenseCategory) {
         ArrayList<Expense> expenses = new ArrayList<>();

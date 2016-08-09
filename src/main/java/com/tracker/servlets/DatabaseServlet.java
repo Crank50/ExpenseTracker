@@ -2,7 +2,6 @@ package com.tracker.servlets;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import com.mchange.v2.c3p0.DataSources;
-
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -111,7 +110,7 @@ public class DatabaseServlet extends HttpServlet {
             System.out.println("NOTE: DROPPED TABLE EXPENSE");
         }
         catch(SQLException sqle){
-            System.err.println("WARNING: DID NOT DROP TABLE EXPENSE");
+            System.out.println("WARNING: DID NOT DROP TABLE EXPENSE");
         }
     }
 
@@ -141,7 +140,7 @@ public class DatabaseServlet extends HttpServlet {
         }
     }
 
-    protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws ServletException, IOException {}
+    protected void doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {}
 
-    protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws ServletException, IOException {}
+    protected void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {}
 }
