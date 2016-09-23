@@ -8,7 +8,6 @@
 
   <h1 style="border-style: dashed">Expense Tracker</h1>
   &nbsp;&nbsp;&nbsp;&nbsp;
-  <a href="/mvc_exp/viewAllTestData">View All Expense Data</a>
-  <a href="/mvc_exp/viewExpenseData">View Expense Data</a>
+  <a href="/mvc_exp/viewAllExpenseData">View All Expense Data</a>
   </body>
 </html>
